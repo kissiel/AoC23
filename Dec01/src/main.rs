@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 fn process_line(s: &str) -> u32 {
     let values = vec![
         ("1", 1),
