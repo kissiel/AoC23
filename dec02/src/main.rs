@@ -39,17 +39,35 @@ fn is_within_limits(limit: RGB, set: RGB) -> bool {
     set.0 <= limit.0 && set.1 <= limit.1 && set.2 <= limit.2
 }
 
+fn minimum_cube_count(sets: impl Iterator<Item = RGB>) -> RGB {
+    let mut highest: RGB = (0, 0, 0);
+    for set in sets {
+        highest.0 = std::cmp::max(set.0, highest.0);
+        highest.1 = std::cmp::max(set.1, highest.1);
+        highest.2 = std::cmp::max(set.2, highest.2);
+    }
+
+    highest
+}
+
 fn main() {
-    let contents = std::fs::read_to_string("input1.txt").unwrap();
+    let contents = std::fs::read_to_string("input2.txt").unwrap();
     let mut sum: usize = 0;
+    let mut sum_power: u32 = 0;
     for (index, line) in contents.split('\n').enumerate() {
         let limits: RGB = (12, 13, 14);
 
         if split_game_into_sets(line).all(|set| is_within_limits(limits, set)) {
             sum += index + 1;
         }
+        let minima = minimum_cube_count(split_game_into_sets(line));
+        let power = minima.0 * minima.1 * minima.2;
+        sum_power += power;
+
+        //println!("{}", power);
     }
-    println!("{}", sum);
+    //println!("{}", sum);
+    println!("{}", sum_power);
 }
 
 #[cfg(test)]
